@@ -1,0 +1,40 @@
+{% load leaflet_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {#  needed for leaflet-timedimension  #}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js"></script>
+
+    {% leaflet_js %}
+    {% leaflet_css %}
+    {% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+    {% bootstrap_css %}         {# Embed Bootstrap CSS #}
+    {% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+    {{ distance_plot_form.media }}
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body, #map {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    {% endblock content %}
+
+{% block javascript %}
+{% endblock javascript %}
+</body>
+</html>

@@ -1,0 +1,199 @@
+{% extends "base_temp.html" %}
+{% load leaflet_tags %}
+{% load crispy_forms_tags %}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+{% load static %}
+
+
+{% block content %}
+    <div>
+    <div class="row ">
+        <div class="col-3 overflow-auto">
+            <form action="{% url 'news_ogc' slug year %}" method="post">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        {{ form.gcm|as_crispy_field }}
+                    </div>
+                    <div class="form-group col-6">
+                        {{ form.rcp|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        {{ form.energy_scenario|as_crispy_field }}
+                    </div>
+                    <div class="form-group col-6">
+                        {{ form.v|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-12">
+                        {{ form.year|as_crispy_field }}
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-primary btn-block" value="Update Map">
+            </form>
+
+            <form action="{% url 'news_wcs' %}" method="post" target="_blank">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        {{ download_form.gcm|as_crispy_field }}
+                    </div>
+                    <div class="form-group col-6">
+                        {{ download_form.rcp|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        {{ download_form.energy_scenario|as_crispy_field }}
+                    </div>
+                    <div class="form-group col-6">
+                        {{ download_form.v|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        {{ download_form.variable|as_crispy_field }}
+                    </div>
+
+                    <div class="form-group col-6">
+                        {{ download_form.year|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        {{ download_form.start_date|as_crispy_field }}
+                    </div>
+
+                    <div class="form-group col-6">
+                        {{ download_form.end_date|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-12">
+                        {{ download_form.format|as_crispy_field }}
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-primary btn-block" value="Download">
+            </form>
+          </div>
+
+        <div class="col-9">
+                <h3>{{ slug }} {{ year }}</h3>
+                <div id="map" style="height: 800px;">
+                </div>
+        </div>
+
+    </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascript %}
+    {# needed for leaflet time dimension   #}
+
+    <script type="text/javascript">
+
+        var map = L.map('map', {
+            zoom: 10,
+            fullscreenControl: true,
+        });
+
+        var timeDimension = new L.TimeDimension({
+            timeInterval: "{{ year }}-01-01/{{ year }}-12-31",
+            period: "P1D",
+        });
+
+        map.timeDimension = timeDimension;
+
+        var player = new L.TimeDimension.Player({
+            transitionTime: 100,
+            loop: false,
+            startOver: true
+        }, timeDimension);
+
+        var timeDimensionControlOptions = {
+            player: player,
+            timeDimension: timeDimension,
+            position: 'bottomleft',
+            autoPlay: false,
+            minSpeed: 1,
+            speedStep: 0.5,
+            maxSpeed: 15,
+            timeSliderDragUpdate: true
+        };
+
+        var timeDimensionControl = new L.Control.TimeDimension(timeDimensionControlOptions);
+        map.addControl(timeDimensionControl);
+
+        var Stadia_AlidadeSmoothDark = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+            maxZoom: 20,
+            attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+        });
+
+        Stadia_AlidadeSmoothDark.addTo(map);
+
+        var wmsUrl = "http://10.16.12.61:9999/geoserver/news/wms"
+        var wmsDischarge = L.tileLayer.wms(wmsUrl, {
+            layers: 'news:{{ slug }}_Discharge_Daily_{{ year }}',
+            opacity: 0.5,
+            format: 'image/png',
+            transparent: true,
+        });
+
+        // Create and add a TimeDimension Layer to the map
+        var tdWmsDischarge = L.timeDimension.layer.wms(wmsDischarge);
+        tdWmsDischarge.addTo(map);
+
+        var wmsRunoff = L.tileLayer.wms(wmsUrl, {
+            layers: 'news:{{ slug }}_Runoff_Daily_{{ year }}',
+            opacity: 0.5,
+            format: 'image/png',
+            transparent: true,
+        });
+
+        // Create and add a TimeDimension Layer to the map
+        var tdWmsRunoff = L.timeDimension.layer.wms(wmsRunoff);
+        tdWmsRunoff.addTo(map);
+
+        var wmsWatertemp = L.tileLayer.wms(wmsUrl, {
+            layers: 'news:{{ slug }}_qxt_watertemp_Daily_{{ year }}',
+            opacity: 0.5,
+            format: 'image/png',
+            transparent: true,
+        });
+
+        // Create and add a TimeDimension Layer to the map
+        var tdWmsWatertemp = L.timeDimension.layer.wms(wmsWatertemp);
+        tdWmsWatertemp.addTo(map);
+
+
+        var baseMaps = {
+            "Discharge": tdWmsDischarge,
+            "Runoff": tdWmsRunoff,
+            "QxT_Watertemp": tdWmsWatertemp
+        };
+
+        L.control.layers(baseMaps, null, {collapsed: false}).addTo(map);
+
+        var maxBounds = L.latLngBounds(
+            L.latLng(5.499550, -167.276413), //Southwest
+            L.latLng(83.162102, -52.233040)  //Northeast
+        );
+
+        map.fitBounds(maxBounds);
+
+
+        map.timeDimension.on('timeloading', function (data) {
+            let s = new Date(timeDimension.getCurrentTime()).toISOString();
+            console.log(s)
+        });
+
+    </script>
+
+{% endblock %}
