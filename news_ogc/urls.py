@@ -3,8 +3,8 @@ from news_ogc import views
 
 
 urlpatterns = [
-    path('wms/<slug:model>/<int:year>/', views.wms_test, name='news_ogc'),
+    # re_path(r'', views.wms),
+    # re_path(r'^$', views.wms),
+    path('wms/<slug:model>/<int:year>/', views.wms, name='news_wms'),
     path('wcs/', views.wcs, name="news_wcs"),
 ]
-
-

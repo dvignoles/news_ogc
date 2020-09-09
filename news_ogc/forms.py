@@ -1,7 +1,8 @@
 from django import forms
 
 gcm_choices = [
-    ('hadgem2-es', 'hadgem2-es'), ('gfdl-esm2m', 'gfdl-esm2m')
+    ('hadgem2-es', 'hadgem2-es'), ('gfdl-esm2m', 'gfdl-esm2m'), ('ipsl-cm5a-lr', 'ipsl-cm5a-lr'),
+    ('miroc-esm-chem', 'miroc-esm-chem'), ('noresm1-m', 'noresm1-m')
 ]
 
 rcp_choices = [
@@ -13,7 +14,7 @@ es_choices = [
 ]
 
 v_choices = [
-    ('v000', 'v000'), ('v001', 'v001')
+    ('v000', 'v000'),
 ]
 
 variable_choices = [
@@ -30,16 +31,10 @@ class data_select(forms.Form):
     rcp = forms.ChoiceField(choices=rcp_choices)
     energy_scenario = forms.ChoiceField(choices=es_choices)
     v = forms.ChoiceField(choices=v_choices)
-    year = forms.IntegerField(min_value=2000, max_value=2005)
+    year = forms.IntegerField(min_value=2000, max_value=2050)
 
-
-class data_download(forms.Form):
-    gcm = forms.ChoiceField(choices=gcm_choices)
-    rcp = forms.ChoiceField(choices=rcp_choices)
-    energy_scenario = forms.ChoiceField(choices=es_choices)
-    v = forms.ChoiceField(choices=v_choices)
+    # Download only
     variable = forms.ChoiceField(choices=variable_choices)
-    year = forms.IntegerField(min_value=2000, max_value=2005)
-    start_date = forms.DateField(input_formats=["%m/%d", "%m-%d"])
-    end_date = forms.DateField(input_formats=["%m/%d", "%m-%d"])
+    start_date = forms.DateField(input_formats=["%m/%d", "%m-%d"], required=False)
+    end_date = forms.DateField(input_formats=["%m/%d", "%m-%d"], required=False)
     format = forms.ChoiceField(choices=format_choices)

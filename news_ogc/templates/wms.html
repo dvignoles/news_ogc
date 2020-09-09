@@ -10,23 +10,49 @@
 {% block content %}
     <div>
     <div class="row ">
-        <div class="col-3 overflow-auto">
-            <form action="{% url 'news_ogc' slug year %}" method="post">
+        <div class="col-12 vh-100">
+                <div id="map">
+                </div>
+        </div>
+    </div>
+    </div>
+
+    <div id="sidebar" class="leaflet-sidebar">
+    <!-- Nav tabs -->
+    <div class="leaflet-sidebar-tabs">
+        <ul role="tablist"> <!-- top aligned tabs -->
+            <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
+        </ul>
+    </div>
+
+    <!-- Tab panes -->
+    <div class="leaflet-sidebar-content">
+        <div class="leaflet-sidebar-pane" id="home">
+            <h1 class="leaflet-sidebar-header">
+                NEWS WBM
+                <div class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></div>
+            </h1>
+            <div class="mr-4">
+                            <form action="{% url 'news_wms' slug year %}" method="post">
                 {% csrf_token %}
                 <div class="form-row">
-                    <div class="form-group col-6">
+                    <div class="form-group col-12">
                         {{ form.gcm|as_crispy_field }}
                     </div>
-                    <div class="form-group col-6">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-12">
                         {{ form.rcp|as_crispy_field }}
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-6">
+                    <div class="form-group col-12">
                         {{ form.energy_scenario|as_crispy_field }}
                     </div>
-                    <div class="form-group col-6">
-                        {{ form.v|as_crispy_field }}
+                </div>
+                                <div class="form-row">
+                    <div class="form-group col-12">
+                                      {{ form.v|as_crispy_field }}
                     </div>
                 </div>
                 <div class="form-row">
@@ -34,63 +60,38 @@
                         {{ form.year|as_crispy_field }}
                     </div>
                 </div>
-                <input type="submit" class="btn btn-primary btn-block" value="Update Map">
-            </form>
-
-            <form action="{% url 'news_wcs' %}" method="post" target="_blank">
-                {% csrf_token %}
+                <input type="submit" class="btn btn-primary btn-block" name="update" value="update">
                 <div class="form-row">
-                    <div class="form-group col-6">
-                        {{ download_form.gcm|as_crispy_field }}
-                    </div>
-                    <div class="form-group col-6">
-                        {{ download_form.rcp|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-6">
-                        {{ download_form.energy_scenario|as_crispy_field }}
-                    </div>
-                    <div class="form-group col-6">
-                        {{ download_form.v|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-6">
-                        {{ download_form.variable|as_crispy_field }}
+                    <div class="form-group col-12">
+                        {{ form.start_date|as_crispy_field }}
                     </div>
 
-                    <div class="form-group col-6">
-                        {{ download_form.year|as_crispy_field }}
-                    </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-6">
-                        {{ download_form.start_date|as_crispy_field }}
-                    </div>
-
-                    <div class="form-group col-6">
-                        {{ download_form.end_date|as_crispy_field }}
+                    <div class="form-group col-12">
+                        {{ form.end_date|as_crispy_field }}
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-12">
-                        {{ download_form.format|as_crispy_field }}
+                        {{ form.variable|as_crispy_field }}
                     </div>
                 </div>
-                <input type="submit" class="btn btn-primary btn-block" value="Download">
-            </form>
-          </div>
-
-        <div class="col-9">
-                <h3>{{ slug }} {{ year }}</h3>
-                <div id="map" style="height: 800px;">
+                <div class="form-row">
+                    <div class="form-group col-12">
+                        {{ form.format|as_crispy_field }}
+                    </div>
                 </div>
+
+                <input type="submit" class="btn btn-primary btn-block" name="download" value="download" formtarget="_blank">
+            </form>
+
+            </div>
+
         </div>
 
     </div>
-    </div>
-
+</div>
 
 {% endblock %}
 
@@ -102,7 +103,21 @@
         var map = L.map('map', {
             zoom: 10,
             fullscreenControl: true,
+            zoomControl: false
         });
+
+        var sidebar = L.control.sidebar({
+            autopan: false,       // whether to maintain the centered map point when opening the sidebar
+            closeButton: true,    // whether t add a close button to the panes
+            container: 'sidebar', // the DOM container or #ID of a predefined sidebar container that should be used
+            position: 'left',     // left or right
+         }).addTo(map);
+
+        sidebar.open('home');
+
+        L.control.zoom({
+            position: 'bottomright'
+        }).addTo(map);
 
         var timeDimension = new L.TimeDimension({
             timeInterval: "{{ year }}-01-01/{{ year }}-12-31",
@@ -120,7 +135,7 @@
         var timeDimensionControlOptions = {
             player: player,
             timeDimension: timeDimension,
-            position: 'bottomleft',
+            position: 'topleft',
             autoPlay: false,
             minSpeed: 1,
             speedStep: 0.5,
@@ -131,19 +146,23 @@
         var timeDimensionControl = new L.Control.TimeDimension(timeDimensionControlOptions);
         map.addControl(timeDimensionControl);
 
-        var Stadia_AlidadeSmoothDark = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-            maxZoom: 20,
-            attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         });
 
-        Stadia_AlidadeSmoothDark.addTo(map);
+        OpenStreetMap_Mapnik.addTo(map);
+
+        let asrc_attribution = '<a href="https://asrc.gc.cuny.edu/environment/">CUNY ASRC ESI</a>'
 
         var wmsUrl = "http://10.16.12.61:9999/geoserver/news/wms"
         var wmsDischarge = L.tileLayer.wms(wmsUrl, {
+            tiled: true,
             layers: 'news:{{ slug }}_Discharge_Daily_{{ year }}',
             opacity: 0.5,
             format: 'image/png',
             transparent: true,
+            attribution: asrc_attribution
         });
 
         // Create and add a TimeDimension Layer to the map
@@ -151,10 +170,12 @@
         tdWmsDischarge.addTo(map);
 
         var wmsRunoff = L.tileLayer.wms(wmsUrl, {
+            tiled: true,
             layers: 'news:{{ slug }}_Runoff_Daily_{{ year }}',
             opacity: 0.5,
             format: 'image/png',
             transparent: true,
+            attribution: asrc_attribution
         });
 
         // Create and add a TimeDimension Layer to the map
@@ -162,10 +183,12 @@
         tdWmsRunoff.addTo(map);
 
         var wmsWatertemp = L.tileLayer.wms(wmsUrl, {
+            tiled: true,
             layers: 'news:{{ slug }}_qxt_watertemp_Daily_{{ year }}',
             opacity: 0.5,
             format: 'image/png',
             transparent: true,
+            attribution: asrc_attribution
         });
 
         // Create and add a TimeDimension Layer to the map
@@ -179,20 +202,34 @@
             "QxT_Watertemp": tdWmsWatertemp
         };
 
-        L.control.layers(baseMaps, null, {collapsed: false}).addTo(map);
-
-        var maxBounds = L.latLngBounds(
-            L.latLng(5.499550, -167.276413), //Southwest
-            L.latLng(83.162102, -52.233040)  //Northeast
-        );
-
-        map.fitBounds(maxBounds);
-
+        L.control.layers(baseMaps, null, {collapsed: false}).setPosition('topleft').addTo(map);
 
         map.timeDimension.on('timeloading', function (data) {
             let s = new Date(timeDimension.getCurrentTime()).toISOString();
-            console.log(s)
+            {#console.log(s)#}
         });
+
+        var info = L.control({position:'topright'});
+
+        info.onAdd = function (map) {
+            this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+            this.update();
+            return this._div;
+        };
+
+        // method that we will use to update the control based on feature properties passed
+        info.update = function (props) {
+            this._div.innerHTML = '<h4>{{ slug }}</h4>'
+        };
+
+        info.addTo(map);
+
+        var maxBounds = L.latLngBounds(
+            L.latLng(5.5, -143), //Southwest
+            L.latLng(65, -50)  //Northeast
+        );
+        map.fitBounds(maxBounds);
+        map.setMaxBounds(maxBounds);
 
     </script>
 

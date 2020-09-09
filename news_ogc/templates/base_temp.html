@@ -9,6 +9,9 @@
 
     {#  needed for leaflet-timedimension  #}
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js"></script>
+    {# font awesome icons#}
+    <script src="https://kit.fontawesome.com/da37569cce.js" crossorigin="anonymous"></script>
+
 
     {% leaflet_js %}
     {% leaflet_css %}
@@ -17,7 +20,7 @@
     {% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
     {{ distance_plot_form.media }}
     <style>
-        body {
+       body {
             padding: 0;
             margin: 0;
         }
@@ -31,9 +34,10 @@
     {% endblock %}
 </head>
 <body>
-    {% block content %}
-    {% endblock content %}
-
+    <div class="container-fluid" id="content">
+            {% block content %}
+            {% endblock content %}
+    </div>
 {% block javascript %}
 {% endblock javascript %}
 </body>

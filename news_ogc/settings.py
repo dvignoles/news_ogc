@@ -72,8 +72,12 @@ LEAFLET_CONFIG = {
             'js': 'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js',
             'css': 'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.min.css',
             'auto-include': True,
+        },
+        'leaflet-sidebar-v2': {
+            'js': 'https://cdn.jsdelivr.net/npm/leaflet-sidebar-v2@3.2.3/js/leaflet-sidebar.min.js',
+            'css': 'https://cdn.jsdelivr.net/npm/leaflet-sidebar-v2@3.2.3/css/leaflet-sidebar.min.css',
+            'auto-include': True,
         }
-
     },
 }
 
@@ -162,3 +166,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CSRF_COOKIE_SAMESITE = 'lax'
