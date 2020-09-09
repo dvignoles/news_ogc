@@ -171,7 +171,6 @@
 
         // Create and add a TimeDimension Layer to the map
         var tdWmsDischarge = L.timeDimension.layer.wms(wmsDischarge);
-        tdWmsDischarge.addTo(map);
 
         var wmsRunoff = L.tileLayer.wms(wmsUrl, {
             tiled: true,
@@ -186,7 +185,6 @@
 
         // Create and add a TimeDimension Layer to the map
         var tdWmsRunoff = L.timeDimension.layer.wms(wmsRunoff);
-        tdWmsRunoff.addTo(map);
 
         var wmsWatertemp = L.tileLayer.wms(wmsUrl, {
             tiled: true,
@@ -201,8 +199,9 @@
 
         // Create and add a TimeDimension Layer to the map
         var tdWmsWatertemp = L.timeDimension.layer.wms(wmsWatertemp);
-        tdWmsWatertemp.addTo(map);
 
+        // Default layer
+        tdWmsDischarge.addTo(map);
 
         var baseMaps = {
             "Discharge": tdWmsDischarge,
@@ -225,6 +224,8 @@
             console.log('loading done');
         });
 
+        // Annotation
+
         var info = L.control({position:'topright'});
 
         info.onAdd = function (map) {
@@ -232,13 +233,59 @@
             this.update();
             return this._div;
         };
-
-        // method that we will use to update the control based on feature properties passed
         info.update = function (props) {
             this._div.innerHTML = '<h4>{{ slug }}</h4>'
         };
 
         info.addTo(map);
+        
+        // Legend
+
+        var dischargeLegend = L.control({position: 'bottomright'});
+        var watertempLegend = L.control({position: 'bottomright'});
+        var runoffLegend = L.control({position: 'bottomright'});
+        
+        dischargeLegend.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'info legend');
+            div.innerHTML +=
+            '<img src="{% static "discharge.png" %}" alt="legend">';
+        return div;
+        };
+        
+        watertempLegend.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'info legend');
+            div.innerHTML +=
+            '<img src="{% static "watertemp.png" %}" alt="legend">';
+        return div;
+        };
+
+        runoffLegend.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'info legend');
+            div.innerHTML +=
+            '<img src="{% static "runoff.png" %}" alt="legend">';
+        return div;
+        };
+
+        dischargeLegend.addTo(map);
+        
+        map.on('baselayerchange', function (eventLayer) {
+            if (eventLayer.name === 'Discharge') {
+                this.removeControl(watertempLegend);
+                this.removeControl(runoffLegend);
+                dischargeLegend.addTo(this);
+            } else if (eventLayer.name === 'QxT_Watertemp'){
+                this.removeControl(dischargeLegend);
+                this.removeControl(runoffLegend)
+                watertempLegend.addTo(this);
+            }
+                else{
+                this.removeControl(dischargeLegend);
+                this.removeControl(watertempLegend)
+                runoffLegend.addTo(this);
+            }
+        });
+
+        // Bounds
 
         var maxBounds = L.latLngBounds(
             L.latLng(5.5, -143), //Southwest

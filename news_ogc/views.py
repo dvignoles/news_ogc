@@ -29,8 +29,8 @@ def wms(request, model="hadgem2-es_rcp8p5_bau-elec_v000", year="2000"):
         form.fields['energy_scenario'].initial = form_selected[2]
         form.fields['v'].initial = form_selected[3]
         form.fields['year'].initial = year
-        form.fields['start_date'].initial = '1/31'
-        form.fields['end_date'].initial = '1/31'
+        form.fields['start_date'].initial = '1/1'
+        form.fields['end_date'].initial = '1/1'
 
     context = {'form': form, 'slug': model, 'year': year}
     return render(request, template, context)
