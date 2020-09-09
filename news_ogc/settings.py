@@ -77,6 +77,10 @@ LEAFLET_CONFIG = {
             'js': 'https://cdn.jsdelivr.net/npm/leaflet-sidebar-v2@3.2.3/js/leaflet-sidebar.min.js',
             'css': 'https://cdn.jsdelivr.net/npm/leaflet-sidebar-v2@3.2.3/css/leaflet-sidebar.min.css',
             'auto-include': True,
+        },
+        'leaflet-spin': {
+            'js': 'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.Spin/1.1.2/leaflet.spin.min.js',
+            'auto-include': True
         }
     },
 }

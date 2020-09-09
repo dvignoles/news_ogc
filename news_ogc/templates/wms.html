@@ -99,11 +99,13 @@
     {# needed for leaflet time dimension   #}
 
     <script type="text/javascript">
+        let CRS = L.CRS.EPSG4326
+        let optimalTileSize = L.point(215,140)
 
         var map = L.map('map', {
             zoom: 10,
             fullscreenControl: true,
-            zoomControl: false
+            zoomControl: false,
         });
 
         var sidebar = L.control.sidebar({
@@ -158,6 +160,8 @@
         var wmsUrl = "http://10.16.12.61:9999/geoserver/news/wms"
         var wmsDischarge = L.tileLayer.wms(wmsUrl, {
             tiled: true,
+            tileSize: optimalTileSize,
+            crs: CRS,
             layers: 'news:{{ slug }}_Discharge_Daily_{{ year }}',
             opacity: 0.5,
             format: 'image/png',
@@ -171,6 +175,8 @@
 
         var wmsRunoff = L.tileLayer.wms(wmsUrl, {
             tiled: true,
+            crs: CRS,
+            tileSize: optimalTileSize,
             layers: 'news:{{ slug }}_Runoff_Daily_{{ year }}',
             opacity: 0.5,
             format: 'image/png',
@@ -184,6 +190,8 @@
 
         var wmsWatertemp = L.tileLayer.wms(wmsUrl, {
             tiled: true,
+            crs: CRS,
+            tileSize: optimalTileSize,
             layers: 'news:{{ slug }}_qxt_watertemp_Daily_{{ year }}',
             opacity: 0.5,
             format: 'image/png',
@@ -207,6 +215,14 @@
         map.timeDimension.on('timeloading', function (data) {
             let s = new Date(timeDimension.getCurrentTime()).toISOString();
             {#console.log(s)#}
+        });
+
+        tdWmsWatertemp.on('loading', function(data) {
+            console.log('loading');
+        });
+
+        tdWmsWatertemp.on('load', function(data) {
+            console.log('loading done');
         });
 
         var info = L.control({position:'topright'});
