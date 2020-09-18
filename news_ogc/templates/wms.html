@@ -100,7 +100,7 @@
 
     <script type="text/javascript">
         let CRS = L.CRS.EPSG4326
-        let optimalTileSize = L.point(215,140)
+        let optimalTileSize = L.point(430,280)
 
         var map = L.map('map', {
             zoom: 10,
@@ -118,7 +118,7 @@
         sidebar.open('home');
 
         L.control.zoom({
-            position: 'bottomright'
+            position: 'bottomleft'
         }).addTo(map);
 
         var timeDimension = new L.TimeDimension({
@@ -293,6 +293,10 @@
         );
         map.fitBounds(maxBounds);
         map.setMaxBounds(maxBounds);
+
+        map.options.minZoom = 4;
+        map.options.maxZoom = 10;
+
 
     </script>
 
