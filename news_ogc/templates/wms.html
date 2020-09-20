@@ -1,11 +1,12 @@
 {% extends "base_temp.html" %}
-{% load leaflet_tags %}
-{% load crispy_forms_tags %}
-{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
-{% bootstrap_css %}         {# Embed Bootstrap CSS #}
-{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
-{% load static %}
 
+{% load crispy_forms_tags %}
+{% load leaflet_tags %}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% load static %}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}            {# Adds date-picker required JS and CSS #}
 
 {% block content %}
     <div>

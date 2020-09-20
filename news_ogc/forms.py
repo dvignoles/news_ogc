@@ -28,6 +28,7 @@ format_choices = [
 
 
 class data_select(forms.Form):
+
     gcm = forms.ChoiceField(choices=gcm_choices)
     rcp = forms.ChoiceField(choices=rcp_choices)
     energy_scenario = forms.ChoiceField(choices=es_choices)
@@ -36,8 +37,8 @@ class data_select(forms.Form):
 
     # Download only
     variable = forms.ChoiceField(choices=variable_choices)
-    start_date = forms.DateField(input_formats=["%m/%d", "%m-%d"], required=False)
-    end_date = forms.DateField(input_formats=["%m/%d", "%m-%d"], required=False)
+    start_date = forms.DateField(input_formats=["%m/%d/%Y", "%m-%d-%Y"], required=False)
+    end_date = forms.DateField(input_formats=["%m/%d/%Y", "%m-%d-%Y"], required=False)
     format = forms.ChoiceField(choices=format_choices)
 
     ## spatial subsetting
