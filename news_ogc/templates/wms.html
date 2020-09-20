@@ -155,7 +155,9 @@
             minSpeed: 1,
             speedStep: 0.5,
             maxSpeed: 15,
-            timeSliderDragUpdate: true
+            timeSliderDragUpdate: true,
+            playButton: false,
+            speedSlider: false
         };
 
         var timeDimensionControl = new L.Control.TimeDimension(timeDimensionControlOptions);
@@ -352,6 +354,21 @@
 
         spatial_subset.onchange = on_spatial_subset_set;
         map.on('move', onExtentChange);
+
+        {# start/end date selectors follow time slider #}
+        let start_date = document.getElementById("id_start_date")
+        start_date.value = new Date(timeDimension.getCurrentTime() + 86400000).toLocaleDateString('en-US');
+
+        let end_date = document.getElementById("id_end_date")
+        end_date.value = new Date(timeDimension.getCurrentTime() + 86400000).toLocaleDateString('en-US');
+
+        function update_dateselect(e){
+            let d = new Date(timeDimension.getCurrentTime() + 86400000).toLocaleDateString('en-US');
+            start_date.value = d;
+            end_date.value = d;
+        }
+
+        timeDimension.on('timeloading',update_dateselect);
     </script>
 
 {% endblock %}
