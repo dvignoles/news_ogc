@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from .forms import data_select
 from datetime import datetime
 
@@ -21,7 +22,7 @@ def wms(request, model="hadgem2-es_rcp8p5_bau-elec_v000", year="2000"):
             new_slug = '_'.join((gcm, rcp, energy_scenario, v))
 
             return redirect(wms, model=new_slug, year=year)
-    else:
+    else: # GET
         form = data_select()
         form_selected = model.split('_')
         form.fields['gcm'].initial = form_selected[0]
@@ -36,9 +37,11 @@ def wms(request, model="hadgem2-es_rcp8p5_bau-elec_v000", year="2000"):
     return render(request, template, context)
 
 def wcs(request):
-    wcs_template = "http://10.16.12.61:9999/geoserver/news/wcs?service=WCS&version=2.0.1&request=GetCoverage&CoverageId= \
-    {gcm}_{rcp}_{energy_scenario}_{v}_{variable}_Daily_{year}&format={fformat}&SUBSET= \
-    time(\"{start_time}‌​Z\",\"{end_time}‌​Z\")&"
+    wcs_template = "http://10.16.12.61:9999/geoserver/news/wcs?service=WCS&version=2.0.1&request=GetCoverage&CoverageId=\
+{gcm}_{rcp}_{energy_scenario}_{v}_{variable}_Daily_{year}&format={fformat}&SUBSET=\
+time(\"{start_time}‌​Z\",\"{end_time}‌​Z\")&"
+
+    wcs_template_spatial = wcs_template + "subset=Lat({lat_start},{lat_end})&subset=Long({lon_start},{lon_end})&"
 
     if request.method == 'POST':
         form = data_select(request.POST)
@@ -58,8 +61,18 @@ def wcs(request):
 
             fformat = form.cleaned_data['format']
 
-            wcs_url = wcs_template.format(gcm=gcm, rcp=rcp, energy_scenario=energy_scenario, v=v, variable=variable,
-                                          year=year, start_time=true_start, end_time=true_end, fformat=fformat)
-            return redirect(wcs_url)
+            lat_start = form.cleaned_data['lat_start']
+            lat_end = form.cleaned_data['lat_end']
+            lon_start = form.cleaned_data['lon_start']
+            lon_end = form.cleaned_data['lon_end']
 
-#http://194.66.252.155/geoserver/OneGDev/wcs?service=WCS&version=2.0.1&CoverageId=OneGDev__CentralMed-MCol&request=GetCoverage&format=image/png&subset=Lat(38.08214,41.72960)&subset=Long(13.23732,14.64357)&
+            if form.cleaned_data['spatial_subset'] is False:
+                wcs_url = wcs_template.format(gcm=gcm, rcp=rcp, energy_scenario=energy_scenario, v=v, variable=variable,
+                                              year=year, start_time=true_start, end_time=true_end, fformat=fformat)
+                return redirect(wcs_url)
+            else:
+                wcs_url = wcs_template_spatial.format(gcm=gcm, rcp=rcp, energy_scenario=energy_scenario, v=v, variable=variable,
+                                              year=year, start_time=true_start, end_time=true_end, fformat=fformat, lat_start=lat_start, lat_end=lat_end, lon_start=lon_start, lon_end=lon_end)
+                return redirect(wcs_url)
+        else:
+            return JsonResponse(status=404, data={'status': 'false', 'message': form.errors})

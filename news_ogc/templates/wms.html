@@ -9,89 +9,101 @@
 
 {% block content %}
     <div>
-    <div class="row ">
-        <div class="col-12 vh-100">
+        <div class="row ">
+            <div class="col-12 vh-100">
                 <div id="map">
                 </div>
+            </div>
         </div>
-    </div>
     </div>
 
     <div id="sidebar" class="leaflet-sidebar">
-    <!-- Nav tabs -->
-    <div class="leaflet-sidebar-tabs">
-        <ul role="tablist"> <!-- top aligned tabs -->
-            <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
-        </ul>
-    </div>
+        <!-- Nav tabs -->
+        <div class="leaflet-sidebar-tabs">
+            <ul role="tablist"> <!-- top aligned tabs -->
+                <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
+            </ul>
+        </div>
 
-    <!-- Tab panes -->
-    <div class="leaflet-sidebar-content">
-        <div class="leaflet-sidebar-pane" id="home">
-            <h1 class="leaflet-sidebar-header">
-                NEWS WBM
-                <div class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></div>
-            </h1>
-            <div class="mr-4">
-                            <form action="{% url 'news_wms' slug year %}" method="post">
-                {% csrf_token %}
-                <div class="form-row">
-                    <div class="form-group col-12">
-                        {{ form.gcm|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-12">
-                        {{ form.rcp|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-12">
-                        {{ form.energy_scenario|as_crispy_field }}
-                    </div>
-                </div>
-                                <div class="form-row">
-                    <div class="form-group col-12">
-                                      {{ form.v|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-12">
-                        {{ form.year|as_crispy_field }}
-                    </div>
-                </div>
-                <input type="submit" class="btn btn-primary btn-block" name="update" value="update">
-                <div class="form-row">
-                    <div class="form-group col-12">
-                        {{ form.start_date|as_crispy_field }}
-                    </div>
+        <!-- Tab panes -->
+        <div class="leaflet-sidebar-content">
+            <div class="leaflet-sidebar-pane" id="home">
+                <h1 class="leaflet-sidebar-header">
+                    NEWS WBM
+                    <div class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></div>
+                </h1>
+                <div class="mr-4">
+                    <form action="{% url 'news_wms' slug year %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                {{ form.gcm|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                {{ form.rcp|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                {{ form.energy_scenario|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                {{ form.v|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                {{ form.year|as_crispy_field }}
+                            </div>
+                        </div>
+                        <input type="submit" class="btn btn-primary btn-block" name="update" value="update">
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                {{ form.start_date|as_crispy_field }}
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                {{ form.end_date|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                {{ form.variable|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                {{ form.format|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            {{ form.non_field_errors }}
+                            <div class="form-group col-6">{{ form.lat_start|as_crispy_field }}</div>
+                            <div class="form-group col-6">{{ form.lat_end|as_crispy_field }}</div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-6">{{ form.lon_start|as_crispy_field }}</div>
+                            <div class="form-group col-6">{{ form.lon_end|as_crispy_field }}</div>
+                        </div>
+                        {{ form.spatial_subset|as_crispy_field }}
+                        <input type="submit" class="btn btn-primary btn-block" name="download" value="download"
+                               formtarget="_blank">
+                    </form>
 
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-12">
-                        {{ form.end_date|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-12">
-                        {{ form.variable|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-12">
-                        {{ form.format|as_crispy_field }}
-                    </div>
-                </div>
-
-                <input type="submit" class="btn btn-primary btn-block" name="download" value="download" formtarget="_blank">
-            </form>
 
             </div>
 
         </div>
-
     </div>
-</div>
 
 {% endblock %}
 
@@ -100,7 +112,7 @@
 
     <script type="text/javascript">
         let CRS = L.CRS.EPSG4326
-        let optimalTileSize = L.point(430,280)
+        let optimalTileSize = L.point(430, 280)
 
         var map = L.map('map', {
             zoom: 10,
@@ -113,7 +125,7 @@
             closeButton: true,    // whether t add a close button to the panes
             container: 'sidebar', // the DOM container or #ID of a predefined sidebar container that should be used
             position: 'left',     // left or right
-         }).addTo(map);
+        }).addTo(map);
 
         sidebar.open('home');
 
@@ -216,17 +228,17 @@
             {#console.log(s)#}
         });
 
-        tdWmsWatertemp.on('loading', function(data) {
+        tdWmsWatertemp.on('loading', function (data) {
             console.log('loading');
         });
 
-        tdWmsWatertemp.on('load', function(data) {
+        tdWmsWatertemp.on('load', function (data) {
             console.log('loading done');
         });
 
         // Annotation
 
-        var info = L.control({position:'topright'});
+        var info = L.control({position: 'topright'});
 
         info.onAdd = function (map) {
             this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
@@ -238,47 +250,46 @@
         };
 
         info.addTo(map);
-        
+
         // Legend
 
         var dischargeLegend = L.control({position: 'bottomright'});
         var watertempLegend = L.control({position: 'bottomright'});
         var runoffLegend = L.control({position: 'bottomright'});
-        
+
         dischargeLegend.onAdd = function (map) {
-        var div = L.DomUtil.create('div', 'info legend');
+            var div = L.DomUtil.create('div', 'info legend');
             div.innerHTML +=
-            '<img src="{% static "discharge.png" %}" alt="legend">';
-        return div;
+                '<img src="{% static "discharge.png" %}" alt="legend">';
+            return div;
         };
-        
+
         watertempLegend.onAdd = function (map) {
-        var div = L.DomUtil.create('div', 'info legend');
+            var div = L.DomUtil.create('div', 'info legend');
             div.innerHTML +=
-            '<img src="{% static "watertemp.png" %}" alt="legend">';
-        return div;
+                '<img src="{% static "watertemp.png" %}" alt="legend">';
+            return div;
         };
 
         runoffLegend.onAdd = function (map) {
-        var div = L.DomUtil.create('div', 'info legend');
+            var div = L.DomUtil.create('div', 'info legend');
             div.innerHTML +=
-            '<img src="{% static "runoff.png" %}" alt="legend">';
-        return div;
+                '<img src="{% static "runoff.png" %}" alt="legend">';
+            return div;
         };
 
         dischargeLegend.addTo(map);
-        
+
         map.on('baselayerchange', function (eventLayer) {
             if (eventLayer.name === 'Discharge') {
                 this.removeControl(watertempLegend);
                 this.removeControl(runoffLegend);
                 dischargeLegend.addTo(this);
-            } else if (eventLayer.name === 'QxT_Watertemp'){
+            } else if (eventLayer.name === 'QxT_Watertemp') {
                 this.removeControl(dischargeLegend);
                 this.removeControl(runoffLegend)
                 watertempLegend.addTo(this);
-            }
-                else{
+            } else {
                 this.removeControl(dischargeLegend);
                 this.removeControl(watertempLegend)
                 runoffLegend.addTo(this);
@@ -297,7 +308,49 @@
         map.options.minZoom = 4;
         map.options.maxZoom = 10;
 
+        {# spatial subsetting  control #}
 
+        {#  initialize  #}
+        let bnds = map.getBounds();
+
+        let lat_start = document.getElementById("lat_start");
+        lat_start.readOnly = true;
+        lat_start.value = bnds.getSouth().toFixed(5);
+
+        let lat_end = document.getElementById("lat_end");
+        lat_end.readOnly = true;
+        lat_end.value = bnds.getNorth().toFixed(5);
+
+        let lon_start = document.getElementById("lon_start");
+        lon_start.readOnly = true;
+        lon_start.value = bnds.getWest().toFixed(5);
+
+        let lon_end  = document.getElementById("lon_end");
+        lon_end.readOnly = true;
+        lon_end.value = bnds.getEast().toFixed(5);
+
+        let spatial_subset = document.getElementById("id_spatial_subset");
+
+
+        function onExtentChange(e) {
+            let bnds = map.getBounds();
+
+            lat_start.value = bnds.getSouth().toFixed(5);
+            lat_end.value = bnds.getNorth().toFixed(5);
+            lon_start.value = bnds.getWest().toFixed(5);
+            lon_end.value = bnds.getEast().toFixed(5);
+        }
+
+        function on_spatial_subset_set(e){
+            let val = spatial_subset.checked;
+            lat_start.readOnly = !val;
+            lat_end.readOnly = !val;
+            lon_start.readOnly = !val;
+            lon_end.readOnly = !val;
+        }
+
+        spatial_subset.onchange = on_spatial_subset_set;
+        map.on('move', onExtentChange);
     </script>
 
 {% endblock %}
