@@ -22,7 +22,9 @@
         <!-- Nav tabs -->
         <div class="leaflet-sidebar-tabs">
             <ul role="tablist"> <!-- top aligned tabs -->
-                <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
+                <li ><a href="#home" role="tab"><i class="fa fa-map mt-2"></i></a></li>
+                <li><a href="#info" role="tab"><i class="fa fa-info mt-2"></i></a></li>
+                <li><a href="#measurement" role="tab"><i class="fa fa-ruler mt-2"></i></a></li>
             </ul>
         </div>
 
@@ -31,7 +33,7 @@
             <div class="leaflet-sidebar-pane" id="home">
                 <h1 class="leaflet-sidebar-header">
                     NEWS WBM
-                    <div class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></div>
+                    <div class="leaflet-sidebar-close"><i class="fa fa-caret-left mt-2"></i></div>
                 </h1>
                 <div class="mr-4">
                     <form action="{% url 'news_wms' slug year %}" method="post">
@@ -101,6 +103,46 @@
 
                 </div>
 
+            </div>
+
+
+            <div class="leaflet-sidebar-pane" id="info">
+                <h1 class="leaflet-sidebar-header">
+                    About NEWS
+                    <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h1>
+
+                <h2>Overview</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A ex inventore ipsam quae recusandae reprehenderit voluptates. Assumenda aut consectetur cupiditate earum facilis iste, laudantium natus pariatur, reiciendis sapiente totam veniam?</p>
+
+                <h2>GCM</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A ex inventore ipsam quae recusandae reprehenderit voluptates. Assumenda aut consectetur cupiditate earum facilis iste, laudantium natus pariatur, reiciendis sapiente totam veniam?</p>
+
+                <h2>RCP</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A ex inventore ipsam quae recusandae reprehenderit voluptates. Assumenda aut consectetur cupiditate earum facilis iste, laudantium natus pariatur, reiciendis sapiente totam veniam?</p>
+
+                <h2>Energy Scenario</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A ex inventore ipsam quae recusandae reprehenderit voluptates. Assumenda aut consectetur cupiditate earum facilis iste, laudantium natus pariatur, reiciendis sapiente totam veniam?</p>
+
+                <h2>V</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A ex inventore ipsam quae recusandae reprehenderit voluptates. Assumenda aut consectetur cupiditate earum facilis iste, laudantium natus pariatur, reiciendis sapiente totam veniam?</p>
+
+            </div>
+
+            <div class="leaflet-sidebar-pane" id="measurement">
+                <h1 class="leaflet-sidebar-header">
+                    Variables
+                    <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h1>
+
+                <h2>Discharge</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci atque dicta error quia. Aut beatae blanditiis dolor fuga fugit iste laborum, neque omnis possimus provident rem totam ut voluptas, voluptate!</p>
+
+                <h2>Runoff</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aliquid animi at delectus eius est excepturi hic inventore itaque nisi non pariatur, possimus provident recusandae repudiandae, tempora ut vel voluptates.</p>
+
+                <h3>Water Temperature</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ad adipisci aliquam aperiam architecto, consequatur deleniti dicta dolore eius expedita illo, libero minus perspiciatis placeat quis quisquam sed suscipit voluptatum.</p>
             </div>
 
         </div>
@@ -263,21 +305,21 @@
         dischargeLegend.onAdd = function (map) {
             var div = L.DomUtil.create('div', 'info legend');
             div.innerHTML +=
-                '<img src="{% static "discharge.png" %}" alt="legend">';
+                '<img src="{% static "img/discharge.png" %}" alt="legend">';
             return div;
         };
 
         watertempLegend.onAdd = function (map) {
             var div = L.DomUtil.create('div', 'info legend');
             div.innerHTML +=
-                '<img src="{% static "watertemp.png" %}" alt="legend">';
+                '<img src="{% static "img/watertemp.png" %}" alt="legend">';
             return div;
         };
 
         runoffLegend.onAdd = function (map) {
             var div = L.DomUtil.create('div', 'info legend');
             div.innerHTML +=
-                '<img src="{% static "runoff.png" %}" alt="legend">';
+                '<img src="{% static "img/runoff.png" %}" alt="legend">';
             return div;
         };
 
