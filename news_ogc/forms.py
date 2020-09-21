@@ -72,3 +72,8 @@ class data_select(forms.Form):
 
         if end_date < start_date:
             raise ValidationError(("start date must be equal to or less than end date"), code='invalid')
+
+        td = end_date - start_date
+        # if greater than 6 months of data, throw error
+        if td.total_seconds() > 16070400:
+            raise ValidationError(("queries are limitted to a maximum interval of 186 days (~6 months)"), code='invalid')
