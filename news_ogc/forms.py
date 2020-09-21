@@ -66,3 +66,9 @@ class data_select(forms.Form):
                 raise ValidationError(('lat_start must be less than lat_end'), code='invalid')
             if lon_start > lon_end:
                 raise ValidationError(('lon_start must be less than lon_end'), code='invalid')
+
+        start_date = cleaned_data.get("start_date")
+        end_date = cleaned_data.get("end_date")
+
+        if end_date < start_date:
+            raise ValidationError(("start date must be equal to or less than end date"), code='invalid')
