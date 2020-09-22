@@ -1,5 +1,5 @@
-let CRS = L.CRS.EPSG4326
-let optimalTileSize = L.point(430, 280)
+let CRS = L.CRS.EPSG4326;
+let optimalTileSize = L.point(430, 280);
 
 var map = L.map('map', {
     zoom: 10,
@@ -51,7 +51,8 @@ map.addControl(timeDimensionControl);
 
 var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    noWrap: true
 });
 
 OpenStreetMap_Mapnik.addTo(map);
@@ -67,7 +68,8 @@ var wmsDischarge = L.tileLayer.wms(wmsUrl, {
     opacity: 0.5,
     format: 'image/png',
     transparent: true,
-    attribution: asrc_attribution
+    attribution: asrc_attribution,
+    noWrap: true
 });
 
 // Create and add a TimeDimension Layer to the map
@@ -81,7 +83,9 @@ var wmsRunoff = L.tileLayer.wms(wmsUrl, {
     opacity: 0.5,
     format: 'image/png',
     transparent: true,
-    attribution: asrc_attribution
+    attribution: asrc_attribution,
+    noWrap: true
+
 });
 
 // Create and add a TimeDimension Layer to the map
@@ -95,7 +99,8 @@ var wmsWatertemp = L.tileLayer.wms(wmsUrl, {
     opacity: 0.5,
     format: 'image/png',
     transparent: true,
-    attribution: asrc_attribution
+    attribution: asrc_attribution,
+    noWrap: true
 });
 
 // Create and add a TimeDimension Layer to the map
@@ -110,7 +115,7 @@ var baseMaps = {
     "QxT_Watertemp": tdWmsWatertemp
 };
 
-L.control.layers(baseMaps, null, {collapsed: false}).setPosition('topleft').addTo(map);
+let layer_control = L.control.layers(baseMaps, null, {collapsed: false}).setPosition('topleft').addTo(map);
 
 // Annotation
 
@@ -174,14 +179,19 @@ map.on('baselayerchange', function (eventLayer) {
 
 // Bounds
 
-var maxBounds = L.latLngBounds(
-    L.latLng(5.5, -143), //Southwest
-    L.latLng(65, -50)  //Northeast
+var InitialBounds = L.latLngBounds(
+    L.latLng(10, -180), //Southwest
+    L.latLng(65, -14)  //Northeast
 );
-map.fitBounds(maxBounds);
+map.fitBounds(InitialBounds);
+
+var maxBounds = L.latLngBounds(
+    L.latLng(0, -180), //Southwest
+    L.latLng(90, 0)  //Northeast
+);
 map.setMaxBounds(maxBounds);
 
-map.options.minZoom = 4;
+map.options.minZoom = 3;
 map.options.maxZoom = 10;
 
 let bnds = map.getBounds();
@@ -241,3 +251,18 @@ function update_dateselect(e){
 }
 
 timeDimension.on('timeloading',update_dateselect);
+
+// change download selection when layer changes
+map.on('baselayerchange' ,function(e){
+    let var_select = document.getElementById("id_variable")
+    if (map.hasLayer(tdWmsDischarge)) {
+        var_select.value = "Discharge"
+    }
+    else if (map.hasLayer(tdWmsWatertemp)){
+        var_select.value = "qxt_watertemp"
+    }
+    else if (map.hasLayer(tdWmsRunoff)){
+        var_select.value = "Runoff"
+    }
+})
+

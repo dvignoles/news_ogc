@@ -59,21 +59,24 @@ class data_select(forms.Form):
         lat_end = cleaned_data.get("lat_end")
         lon_start = cleaned_data.get("lon_start")
         lon_end = cleaned_data.get("lon_end")
+        spatial_subset = cleaned_data.get("spatial_subset")
 
-        if lat_start and lat_end:
-            # Only do something if both fields are valid so far.
-            if lat_start > lat_end:
-                raise ValidationError(('lat_start must be less than lat_end'), code='invalid')
-            if lon_start > lon_end:
-                raise ValidationError(('lon_start must be less than lon_end'), code='invalid')
+        if spatial_subset:
+            if lat_start and lat_end:
+                if lat_start > lat_end:
+                    raise ValidationError(('lat_start must be less than lat_end'), code='invalid')
+            if lon_start and lon_end:
+                if lon_start > lon_end:
+                    raise ValidationError(('lon_start must be less than lon_end'), code='invalid')
 
         start_date = cleaned_data.get("start_date")
         end_date = cleaned_data.get("end_date")
 
-        if end_date < start_date:
-            raise ValidationError(("start date must be equal to or less than end date"), code='invalid')
+        if end_date and start_date:
+            if end_date < start_date:
+                raise ValidationError(("start date must be equal to or less than end date"), code='invalid')
 
-        td = end_date - start_date
-        # if greater than 6 months of data, throw error
-        if td.total_seconds() > 16070400:
-            raise ValidationError(("queries are limitted to a maximum interval of 186 days (~6 months)"), code='invalid')
+            td = end_date - start_date
+            # if greater than 6 months of data, throw error
+            if td.total_seconds() > 16070400:
+                raise ValidationError(("queries are limitted to a maximum interval of 186 days (~6 months)"), code='invalid')
