@@ -1,4 +1,3 @@
-let CRS = L.CRS.EPSG4326;
 let optimalTileSize = L.point(430, 280);
 
 var map = L.map('map', {
@@ -59,12 +58,11 @@ OpenStreetMap_Mapnik.addTo(map);
 
 let asrc_attribution = '<a href="https://asrc.gc.cuny.edu/environment/">CUNY ASRC ESI</a>'
 
-var wmsUrl = "http://10.16.12.61:9999/geoserver/news/wms"
+var wmsUrl = "http://10.16.12.61:9999/geoserver/newswbm/wms"
 var wmsDischarge = L.tileLayer.wms(wmsUrl, {
     tiled: true,
     tileSize: optimalTileSize,
-    crs: CRS,
-    layers: `news:${slug}_Discharge_Daily_${year}`,
+    layers: `newswbm:multiscenario_${slug}_discharge_daily_${year}_nolakes`,
     opacity: 0.5,
     format: 'image/png',
     transparent: true,
@@ -75,27 +73,10 @@ var wmsDischarge = L.tileLayer.wms(wmsUrl, {
 // Create and add a TimeDimension Layer to the map
 var tdWmsDischarge = L.timeDimension.layer.wms(wmsDischarge);
 
-var wmsRunoff = L.tileLayer.wms(wmsUrl, {
-    tiled: true,
-    crs: CRS,
-    tileSize: optimalTileSize,
-    layers: `news:${slug}_Runoff_Daily_${year}`,
-    opacity: 0.5,
-    format: 'image/png',
-    transparent: true,
-    attribution: asrc_attribution,
-    noWrap: true
-
-});
-
-// Create and add a TimeDimension Layer to the map
-var tdWmsRunoff = L.timeDimension.layer.wms(wmsRunoff);
-
 var wmsWatertemp = L.tileLayer.wms(wmsUrl, {
     tiled: true,
-    crs: CRS,
     tileSize: optimalTileSize,
-    layers: `news:${slug}_qxt_watertemp_Daily_${year}`,
+    layers: `newswbm:multiscenario_${slug}_qxt_watertemp_daily_${year}_nolakes`,
     opacity: 0.5,
     format: 'image/png',
     transparent: true,
@@ -106,13 +87,42 @@ var wmsWatertemp = L.tileLayer.wms(wmsUrl, {
 // Create and add a TimeDimension Layer to the map
 var tdWmsWatertemp = L.timeDimension.layer.wms(wmsWatertemp);
 
+var wmsAirTemperature = L.tileLayer.wms(wmsUrl, {
+    tiled: true,
+    tileSize: optimalTileSize,
+    layers: `newswbm:multiscenario_${slug}_airtemperature_daily_${year}_nolakes`,
+    opacity: 0.5,
+    format: 'image/png',
+    transparent: true,
+    attribution: asrc_attribution,
+    noWrap: true
+});
+
+// Create and add a TimeDimension Layer to the map
+var tdWmsAirTemperature = L.timeDimension.layer.wms(wmsAirTemperature);
+
+var wmsWetBulbTemp = L.tileLayer.wms(wmsUrl, {
+    tiled: true,
+    tileSize: optimalTileSize,
+    layers: `newswbm:multiscenario_${slug}_wetbulbtemp_daily_${year}_nolakes`,
+    opacity: 0.5,
+    format: 'image/png',
+    transparent: true,
+    attribution: asrc_attribution,
+    noWrap: true
+});
+
+// Create and add a TimeDimension Layer to the map
+var tdWmsWetBulbTemp = L.timeDimension.layer.wms(wmsWetBulbTemp);
+
 // Default layer
 tdWmsDischarge.addTo(map);
 
 var baseMaps = {
     "Discharge": tdWmsDischarge,
-    "Runoff": tdWmsRunoff,
-    "QxT_Watertemp": tdWmsWatertemp
+    "QxT_Watertemp": tdWmsWatertemp,
+    "Air Temperature": tdWmsAirTemperature,
+    "Wet Bulb Temperature": tdWmsWetBulbTemp
 };
 
 let layer_control = L.control.layers(baseMaps, null, {collapsed: false}).setPosition('topleft').addTo(map);
@@ -152,13 +162,6 @@ watertempLegend.onAdd = function (map) {
     return div;
 };
 
-runoffLegend.onAdd = function (map) {
-    var div = L.DomUtil.create('div', 'info legend');
-    div.innerHTML +=
-        `<img src=${runoff_png} alt="legend">`;
-    return div;
-};
-
 dischargeLegend.addTo(map);
 
 map.on('baselayerchange', function (eventLayer) {
@@ -170,10 +173,6 @@ map.on('baselayerchange', function (eventLayer) {
         this.removeControl(dischargeLegend);
         this.removeControl(runoffLegend)
         watertempLegend.addTo(this);
-    } else {
-        this.removeControl(dischargeLegend);
-        this.removeControl(watertempLegend)
-        runoffLegend.addTo(this);
     }
 });
 
@@ -256,13 +255,10 @@ timeDimension.on('timeloading',update_dateselect);
 map.on('baselayerchange' ,function(e){
     let var_select = document.getElementById("id_variable")
     if (map.hasLayer(tdWmsDischarge)) {
-        var_select.value = "Discharge"
+        var_select.value = "discharge"
     }
     else if (map.hasLayer(tdWmsWatertemp)){
         var_select.value = "qxt_watertemp"
-    }
-    else if (map.hasLayer(tdWmsRunoff)){
-        var_select.value = "Runoff"
     }
 })
 

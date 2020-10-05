@@ -7,7 +7,7 @@ gcm_choices = [
 ]
 
 rcp_choices = [
-    ('rcp8p5', 'rcp8p5'),
+    ('rcp2p6', 'rcp2p6'), ('rcp4p5', 'rcp4p5'),  ('rcp6p0', 'rcp6p0'), ('rcp8p5', 'rcp8p5'),
 ]
 
 es_choices = [
@@ -19,7 +19,7 @@ v_choices = [
 ]
 
 variable_choices = [
-    ('Discharge', 'discharge'), ('qxt_watertemp', 'qxt_watertemp'), ('Runoff', 'runoff'),
+    ('discharge', 'discharge'), ('qxt_watertemp', 'qxt_watertemp'), ('runoff', 'runoff'),
 ]
 
 format_choices = [
@@ -31,9 +31,9 @@ class data_select(forms.Form):
 
     gcm = forms.ChoiceField(choices=gcm_choices)
     rcp = forms.ChoiceField(choices=rcp_choices)
-    energy_scenario = forms.ChoiceField(choices=es_choices)
-    v = forms.ChoiceField(choices=v_choices)
-    year = forms.IntegerField(min_value=2000, max_value=2050)
+    #energy_scenario = forms.ChoiceField(choices=es_choices)
+    #v = forms.ChoiceField(choices=v_choices)
+    year = forms.IntegerField(min_value=1980, max_value=2050)
 
     # Download only
     variable = forms.ChoiceField(choices=variable_choices)
