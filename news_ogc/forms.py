@@ -19,7 +19,8 @@ v_choices = [
 ]
 
 variable_choices = [
-    ('discharge', 'discharge'), ('qxt_watertemp', 'qxt_watertemp'), ('runoff', 'runoff'),
+    ('discharge', 'discharge'), ('qxt_watertemp', 'qxt_watertemp'), ('airtemperature','airtemperature'),
+    ('wetbulbtemp', 'wetbulbtemperature')
 ]
 
 format_choices = [

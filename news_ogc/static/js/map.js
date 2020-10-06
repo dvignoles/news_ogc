@@ -146,7 +146,10 @@ info.addTo(map);
 
 var dischargeLegend = L.control({position: 'bottomright'});
 var watertempLegend = L.control({position: 'bottomright'});
-var runoffLegend = L.control({position: 'bottomright'});
+// var runoffLegend = L.control({position: 'bottomright'});
+var airtemperatureLegend = L.control({position: 'bottomright'});
+var wetbulbtempLegend = L.control({position: 'bottomright'});
+
 
 dischargeLegend.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'info legend');
@@ -162,21 +165,53 @@ watertempLegend.onAdd = function (map) {
     return div;
 };
 
+airtemperatureLegend.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'info legend');
+    div.innerHTML +=
+        `<img src=${airtemperature_png} alt="legend">`;
+    return div;
+};
+
+wetbulbtempLegend.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'info legend');
+    div.innerHTML +=
+        `<img src=${wetbulbtemp_png} alt="legend">`;
+    return div;
+};
+
 dischargeLegend.addTo(map);
 
 map.on('baselayerchange', function (eventLayer) {
     if (eventLayer.name === 'Discharge') {
         this.removeControl(watertempLegend);
-        this.removeControl(runoffLegend);
+        // this.removeControl(runoffLegend);
+        this.removeControl(airtemperatureLegend);
+        this.removeControl(wetbulbtempLegend);
         dischargeLegend.addTo(this);
     } else if (eventLayer.name === 'QxT_Watertemp') {
         this.removeControl(dischargeLegend);
-        this.removeControl(runoffLegend)
+        this.removeControl(airtemperatureLegend);
+        this.removeControl(wetbulbtempLegend);
+        // this.removeControl(runoffLegend)
         watertempLegend.addTo(this);
+    } else if (eventLayer.name === 'Air Temperature') {
+        this.removeControl(dischargeLegend);
+        this.removeControl(watertempLegend);
+        this.removeControl(wetbulbtempLegend);
+        // this.removeControl(runoffLegend)
+       airtemperatureLegend.addTo(this);
+    } else if (eventLayer.name === 'Wet Bulb Temperature') {
+        this.removeControl(dischargeLegend);
+        this.removeControl(airtemperatureLegend);
+        this.removeControl(watertempLegend);
+        // this.removeControl(runoffLegend)
+        wetbulbtempLegend.addTo(this);
     }
 });
 
 // Bounds
+map.options.minZoom = 4;
+map.options.maxZoom = 10;
 
 var InitialBounds = L.latLngBounds(
     L.latLng(10, -180), //Southwest
@@ -190,8 +225,7 @@ var maxBounds = L.latLngBounds(
 );
 map.setMaxBounds(maxBounds);
 
-map.options.minZoom = 3;
-map.options.maxZoom = 10;
+
 
 let bnds = map.getBounds();
 
@@ -259,6 +293,12 @@ map.on('baselayerchange' ,function(e){
     }
     else if (map.hasLayer(tdWmsWatertemp)){
         var_select.value = "qxt_watertemp"
+    }
+    else if (map.hasLayer(tdWmsAirTemperature)){
+        var_select.value = "airtemperature"
+    }
+    else if (map.hasLayer(tdWmsWetBulbTemp)){
+        var_select.value = "wetbulbtemp"
     }
 })
 
