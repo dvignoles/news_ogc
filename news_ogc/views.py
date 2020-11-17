@@ -30,7 +30,7 @@ def wms(request, model="hadgem2-es_rcp8p5", year="2000"):
 
         year_widget = YearPickerInput(format='%Y', options={
             'minDate': "01/01/1980",
-            'maxDate': "12/31/2050",
+            'maxDate': "12/31/2060",
             'defaultDate': "01/01/{}".format(year)
         })
 
@@ -38,7 +38,7 @@ def wms(request, model="hadgem2-es_rcp8p5", year="2000"):
 
         date_widget = DatePickerInput(format='%m/%d/%Y', options={
             'minDate': "01/01/1980",
-            'maxDate': "12/31/2050",
+            'maxDate': "12/31/2060",
             'defaultDate': "01/01/{}".format(year)
         })
 

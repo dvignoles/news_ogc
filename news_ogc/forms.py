@@ -34,7 +34,7 @@ class data_select(forms.Form):
     rcp = forms.ChoiceField(choices=rcp_choices)
     #energy_scenario = forms.ChoiceField(choices=es_choices)
     #v = forms.ChoiceField(choices=v_choices)
-    year = forms.IntegerField(min_value=1980, max_value=2050)
+    year = forms.IntegerField(min_value=1980, max_value=2060)
 
     # Download only
     variable = forms.ChoiceField(choices=variable_choices)
