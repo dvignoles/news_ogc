@@ -24,7 +24,7 @@
             <ul role="tablist"> <!-- top aligned tabs -->
                 <li ><a href="#home" role="tab"><i class="fa fa-map mt-2"></i></a></li>
                 <li><a href="#info" role="tab"><i class="fa fa-info mt-2"></i></a></li>
-                <li><a href="#measurement" role="tab"><i class="fa fa-ruler mt-2"></i></a></li>
+{#                <li><a href="#measurement" role="tab"><i class="fa fa-ruler mt-2"></i></a></li>#}
             </ul>
         </div>
 
@@ -106,18 +106,13 @@
                 <p>This tool provides access to the NEWS Water Balance Model data set. </p>
 
                 <h2>GCM</h2>
-                <p>Global Circulation Model</p>
+                <p><a href="https://www.ipcc-data.org/guidelines/pages/gcm_guide.html">General Circulation Models</a> represent physical processes in the atmosphere, ocean, cryosphere, and land surface. GCMs use a three dimensional grid over the globe at a coarse resolution.
+                Smaller scale physical processes are averaged over the larger GCM scale.</p>
 
                 <h2>RCP</h2>
-                <p>Representative Concentration Pathway.</p>
+                <p><a href="https://www.ipcc-data.org/guidelines/pages/glossary/glossary_r.html">Representative Concentration Pathways</a> are time series scenarios tracking the trajectories of green house gases, aerosols, land use, and land coverage.
 
-            </div>
-
-            <div class="leaflet-sidebar-pane" id="measurement">
-                <h1 class="leaflet-sidebar-header">
-                    Variables
-                    <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span>
-                </h1>
+                </p>
 
                 <h2>Discharge</h2>
                 <p>“River Flow”. Simulated daily river flow (m3/day).</p>
@@ -134,6 +129,14 @@
 
             </div>
 
+{#            <div class="leaflet-sidebar-pane" id="measurement">#}
+{#                <h1 class="leaflet-sidebar-header">#}
+{#                    Variables#}
+{#                    <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span>#}
+{#                </h1>#}
+
+            </div>
+
         </div>
     </div>
 
@@ -143,6 +146,8 @@
     <script type="text/javascript">
         let year = '{{ year }}';
         let slug = '{{ slug }}';
+        let gcm = '{{ gcm }}';
+        let rcp = '{{ rcp }}';
 
         let discharge_png = "{% static "img/discharge.png" %}" ;
         let watertemp_png = "{% static "img/watertemp.png" %}";

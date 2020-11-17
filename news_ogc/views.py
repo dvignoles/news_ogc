@@ -47,8 +47,8 @@ def wms(request, model="hadgem2-es_rcp8p5", year="2000"):
 
 
 
-
-    context = {'form': form, 'slug': model, 'year': year}
+    gcm,rcp = model.split('_')
+    context = {'form': form, 'slug': model, 'gcm':gcm, 'rcp': rcp, 'year': year}
     return render(request, template, context)
 
 def wcs(request):

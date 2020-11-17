@@ -122,7 +122,7 @@ tdWmsDischarge.addTo(map);
 
 var baseMaps = {
     "Discharge": tdWmsDischarge,
-    "QxT_Watertemp": tdWmsWatertemp,
+    "Water Temperature": tdWmsWatertemp,
     "Air Temperature": tdWmsAirTemperature,
     "Wet Bulb Temperature": tdWmsWetBulbTemp
 };
@@ -139,7 +139,9 @@ info.onAdd = function (map) {
     return this._div;
 };
 info.update = function (props) {
-    this._div.innerHTML = `<h4>${slug}</h4>`
+    this._div.innerHTML = `<h5>${gcm}</h5>
+                           <h5>${rcp}</h5>
+                           `
 };
 
 info.addTo(map);
@@ -190,7 +192,7 @@ map.on('baselayerchange', function (eventLayer) {
         this.removeControl(airtemperatureLegend);
         this.removeControl(wetbulbtempLegend);
         dischargeLegend.addTo(this);
-    } else if (eventLayer.name === 'QxT_Watertemp') {
+    } else if (eventLayer.name === 'Water Temperature') {
         this.removeControl(dischargeLegend);
         this.removeControl(airtemperatureLegend);
         this.removeControl(wetbulbtempLegend);
