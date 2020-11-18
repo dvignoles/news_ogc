@@ -3,8 +3,9 @@ from django.http import JsonResponse
 from .forms import data_select
 from datetime import datetime
 from bootstrap_datepicker_plus import DatePickerInput, YearPickerInput
+from django.views.decorators.csrf import csrf_exempt
 
-
+@csrf_exempt
 def wms(request, model="hadgem2-es_rcp8p5", year="2000"):
     template = 'wms.html'
 
@@ -51,6 +52,7 @@ def wms(request, model="hadgem2-es_rcp8p5", year="2000"):
     context = {'form': form, 'slug': model, 'gcm':gcm, 'rcp': rcp, 'year': year}
     return render(request, template, context)
 
+@csrf_exempt
 def wcs(request):
     wcs_template = "http://10.16.12.61:9999/geoserver/newswbm/wcs?service=WCS&version=2.0.1&request=GetCoverage&CoverageId=\
 multiscenario_{gcm}_{rcp}_{variable}_daily_{year}&format={fformat}&SUBSET=\
