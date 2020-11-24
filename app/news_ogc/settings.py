@@ -175,4 +175,3 @@ USE_TZ = True
 
 CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE', 'True')
 SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE', 'True')
-# CSRF_COOKIE_SAMESITE = 'lax'

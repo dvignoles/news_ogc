@@ -44,14 +44,14 @@ class data_select(forms.Form):
 
     ## spatial subsetting
     spatial_subset = forms.BooleanField(required=False, label="Clip download to extents?")
-    lat_start = forms.FloatField(required=False, min_value=-90.0, max_value=90.0, label="Latitude S",
+    lat_start = forms.FloatField(required=False, label="Latitude S",
                                  widget=forms.NumberInput(attrs={'id': 'lat_start'}))
-    lat_end = forms.FloatField(required=False, min_value=-90.0, max_value=90.0, label="Latitude N",
+    lat_end = forms.FloatField(required=False, label="Latitude N",
                                widget=forms.NumberInput(attrs={'id': 'lat_end'}))
 
-    lon_start = forms.FloatField(required=False, min_value=-180.0, max_value=180.0, label="Longitude W",
+    lon_start = forms.FloatField(required=False, label="Longitude W",
                                  widget=forms.NumberInput(attrs={'id': 'lon_start'}))
-    lon_end = forms.FloatField(required=False, min_value=-180.0, max_value=180.0, label="Longitude E",
+    lon_end = forms.FloatField(required=False, label="Longitude E",
                                widget=forms.NumberInput(attrs={'id': 'lon_end'}))
 
     def clean(self):

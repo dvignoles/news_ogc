@@ -1,9 +1,20 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
-from .forms import data_select
+from django.views.generic import View
+from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from bootstrap_datepicker_plus import DatePickerInput, YearPickerInput
-from django.views.decorators.csrf import csrf_exempt
+from .forms import data_select
+
+
+class Index(View):
+    template_name = 'index.html'
+
+    def get(self, request):
+        today_year = str(datetime.today().year)
+        context = {'today_year': today_year}
+        return render(request, self.template_name, context)
+
 
 @csrf_exempt
 def wms(request, model="hadgem2-es_rcp8p5", year="2000"):
