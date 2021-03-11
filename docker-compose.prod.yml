@@ -2,6 +2,7 @@ version: '3.7'
 
 services:
   web:
+    image: news_ogc_web 
     build: 
         context: ./app
         dockerfile: Dockerfile.prod
@@ -15,6 +16,7 @@ services:
     env_file:
       - ./app/.env.prod
   nginx:
+    image: news_ogc_nginx
     build: ./nginx
     volumes:
       - static_volume:/home/app/web/staticfiles
@@ -26,7 +28,6 @@ services:
       - web
 networks:
   geoserver_geo-net:
-    external: true
 
 volumes:
     static_volume:
