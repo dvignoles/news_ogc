@@ -60,7 +60,7 @@ OpenStreetMap_Mapnik.addTo(map);
 
 let asrc_attribution = '<a href="https://asrc.gc.cuny.edu/environment/">CUNY ASRC ESI</a>'
 
-var wmsUrl = "http://10.16.12.61:9999/geoserver/newswbm/wms"
+var wmsUrl = "http://wfs.climateimpactsonpowersupply.net/wms"
 var wmsDischarge = L.tileLayer.wms(wmsUrl, {
     tiled: true,
     tileSize: optimalTileSize,
