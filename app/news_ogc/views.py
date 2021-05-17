@@ -65,7 +65,7 @@ def wms(request, model="hadgem2-es_rcp8p5", year="2000"):
 
 @csrf_exempt
 def wcs(request):
-    wcs_template = "http://10.16.12.61:9999/geoserver/newswbm/wcs?service=WCS&version=2.0.1&request=GetCoverage&CoverageId=\
+    wcs_template = "https://newsows.environmentalcrossroads.net/newswbm/wcs?service=WCS&version=2.0.1&request=GetCoverage&CoverageId=\
 multiscenario_{gcm}_{rcp}_{variable}_daily_{year}&format={fformat}&SUBSET=\
 time(\"{start_time}‌​Z\",\"{end_time}‌​Z\")&"
 
