@@ -65,8 +65,8 @@ def wms(request, model="hadgem2-es_rcp8p5", year="2000"):
 
 @csrf_exempt
 def wcs(request):
-    wcs_template = "https://newsows.environmentalcrossroads.net/newswbm/wcs?service=WCS&version=2.0.1&request=GetCoverage&CoverageId=\
-multiscenario_{gcm}_{rcp}_{variable}_daily_{year}&format={fformat}&SUBSET=\
+    wcs_template = "https://newsows.environmentalcrossroads.net/news/wcs?service=WCS&version=2.0.1&request=GetCoverage&CoverageId=\
+multiscenario_{gcm}_{rcp}_{variable}_daily&format={fformat}&SUBSET=\
 time(\"{start_time}‌​Z\",\"{end_time}‌​Z\")&"
 
     wcs_template_spatial = wcs_template + "subset=Lat({lat_start},{lat_end})&subset=Long({lon_start},{lon_end})&"
@@ -98,7 +98,7 @@ time(\"{start_time}‌​Z\",\"{end_time}‌​Z\")&"
                 return redirect(wcs_url)
             else:
                 wcs_url = wcs_template_spatial.format(gcm=gcm, rcp=rcp, variable=variable,
-                                              year=year, start_time=true_start, end_time=true_end, fformat=fformat, lat_start=lat_start, lat_end=lat_end, lon_start=lon_start, lon_end=lon_end)
+                                              start_time=true_start, end_time=true_end, fformat=fformat, lat_start=lat_start, lat_end=lat_end, lon_start=lon_start, lon_end=lon_end)
                 return redirect(wcs_url)
         else:
             return JsonResponse(status=404, data={'status': 'invalid', 'message': form.errors})
