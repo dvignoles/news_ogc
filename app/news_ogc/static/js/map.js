@@ -60,11 +60,11 @@ OpenStreetMap_Mapnik.addTo(map);
 
 let asrc_attribution = '<a href="https://asrc.gc.cuny.edu/environment/">CUNY ASRC ESI</a>'
 
-var wmsUrl = "https://newsows.environmentalcrossroads.net/newswbm/wms"
+var wmsUrl = "https://newsows.environmentalcrossroads.net/news/wms"
 var wmsDischarge = L.tileLayer.wms(wmsUrl, {
     tiled: true,
     tileSize: optimalTileSize,
-    layers: `newswbm:multiscenario_${slug}_discharge_daily_${year}_nolakes`,
+    layers: `news:multiscenario_${slug}_discharge_daily_nolakes`,
     opacity: 0.5,
     format: 'image/png',
     transparent: true,
@@ -78,7 +78,7 @@ var tdWmsDischarge = L.timeDimension.layer.wms(wmsDischarge);
 var wmsWatertemp = L.tileLayer.wms(wmsUrl, {
     tiled: true,
     tileSize: optimalTileSize,
-    layers: `newswbm:multiscenario_${slug}_qxt_watertemp_daily_${year}_nolakes`,
+    layers: `news:multiscenario_${slug}_qxt_watertemp_daily_nolakes`,
     opacity: 0.5,
     format: 'image/png',
     transparent: true,
@@ -92,7 +92,7 @@ var tdWmsWatertemp = L.timeDimension.layer.wms(wmsWatertemp);
 var wmsAirTemperature = L.tileLayer.wms(wmsUrl, {
     tiled: true,
     tileSize: optimalTileSize,
-    layers: `newswbm:multiscenario_${slug}_airtemperature_daily_${year}_nolakes`,
+    layers: `news:multiscenario_${slug}_airtemperature_daily_nolakes`,
     opacity: 0.5,
     format: 'image/png',
     transparent: true,
@@ -106,7 +106,7 @@ var tdWmsAirTemperature = L.timeDimension.layer.wms(wmsAirTemperature);
 var wmsWetBulbTemp = L.tileLayer.wms(wmsUrl, {
     tiled: true,
     tileSize: optimalTileSize,
-    layers: `newswbm:multiscenario_${slug}_wetbulbtemp_daily_${year}_nolakes`,
+    layers: `news:multiscenario_${slug}_wetbulbtemp_daily_nolakes`,
     opacity: 0.5,
     format: 'image/png',
     transparent: true,
